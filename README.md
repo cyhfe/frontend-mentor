@@ -4,5 +4,6 @@
 
 ![qr-code](./images/qr-code.png)
 
-[live](https://cyh-qr-code.netlify.app/)
+[live demo](https://cyh-qr-code.netlify.app/)
+
 [code](./qr-code-component-main/)
