@@ -9,9 +9,12 @@ import {
   ModalContents,
 } from "./Modal"
 function Comment({ comment, vote }) {
-  const { addReply } = useComments()
+  const { addReply, editComment } = useComments()
   const { user } = useUser()
   const [showReply, setShowReply] = useState(false)
+  const [editable, setEditable] = useState(false)
+  const [content, setContent] = useState(comment.content)
+
   const handleUp = () => {
     vote(comment.id, "up")
   }
@@ -23,6 +26,12 @@ function Comment({ comment, vote }) {
     addReply(comment, content, user)
   }
 
+  const handleSubmitEdit = (e) => {
+    e.preventDefault()
+    editComment(comment.id, content)
+    setEditable(false)
+  }
+
   return (
     <div>
       <div>
@@ -32,7 +41,19 @@ function Comment({ comment, vote }) {
         <div>{comment?.createdAt}</div>
       </div>
       <div style={{ border: "1px solid red", padding: "1rem" }}>
-        {comment?.content}
+        {editable ? (
+          <div>
+            <form onSubmit={handleSubmitEdit}>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+              <input type="submit" value="update" />
+            </form>
+          </div>
+        ) : (
+          comment?.content
+        )}
       </div>
       <div>
         <button onClick={handleUp}>+</button>
@@ -43,7 +64,7 @@ function Comment({ comment, vote }) {
       {comment.replies.length > 0 &&
         comment.replies.map((reply) => <div>{reply.content}</div>)}
       {user.username === comment.user.username ? (
-        <Control comment={comment} />
+        <Control comment={comment} setEditable={setEditable} />
       ) : (
         <div>
           <button onClick={() => setShowReply((show) => !show)}>reply</button>
@@ -56,18 +77,31 @@ function Comment({ comment, vote }) {
   )
 }
 
-function Control({ comment }) {
+function Control({ comment, setEditable }) {
+  return (
+    <>
+      <Delete comment={comment} />
+      <Edit setEditable={setEditable} />
+    </>
+  )
+}
+
+function Edit({ setEditable }) {
+  // const {} = useComments()
+  const { user } = useUser()
+  const onSubmit = (content) => {}
+  return (
+    <div>
+      <button onClick={() => setEditable((b) => !b)}>edit</button>
+      {/* <EditReply onSubmit={onSubmit} text="Replys" image={user.image.png} /> */}
+    </div>
+  )
+}
+
+function Delete({ comment }) {
   const { removeComment } = useComments()
   return (
     <div>
-      {/* <button>edit</button>
-      <button onClick={open}>delete</button> */}
-      {/* <Dialog isOpen={showDialog} onDismiss={close}>
-        <h4>Delete comment</h4>
-        <p>Are you sure you want to delete this comment?</p>
-        <button onClick={close}>CANCEL</button>
-        <button onClick={() => handleRemoveComment(comment.id)}>DELETE</button>
-      </Dialog> */}
       <Modal>
         <ModalOpenButton>
           <button>delete</button>
@@ -88,12 +122,6 @@ function Control({ comment }) {
             </button>
           </ModalConfirmButton>
         </ModalContents>
-      </Modal>
-      <Modal>
-        <ModalOpenButton>
-          <button>edit</button>
-        </ModalOpenButton>
-        <ModalContents></ModalContents>
       </Modal>
     </div>
   )

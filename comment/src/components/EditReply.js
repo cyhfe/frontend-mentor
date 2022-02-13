@@ -1,7 +1,7 @@
 import { useState } from "react"
 
-function EditReply({ onSubmit, image, text }) {
-  const [content, setContent] = useState("")
+function EditReply({ onSubmit, image, text, initContent = "" }) {
+  const [content, setContent] = useState(initContent)
   const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit(content)

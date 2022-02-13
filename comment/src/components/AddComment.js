@@ -1,5 +1,4 @@
 import { useComments, useUser } from "../context"
-import { useState } from "react"
 import EditReply from "./EditReply"
 
 function AddComment() {

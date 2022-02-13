@@ -81,11 +81,26 @@ export const useComments = () => {
     setComments(newComments)
   }
 
+  const editComment = (id, content) => {
+    const newComments = comments.map((comment) => {
+      if (comment.id === id) {
+        return {
+          ...comment,
+          content,
+        }
+      } else {
+        return comment
+      }
+    })
+    setComments(newComments)
+  }
+
   return {
     comments,
     addComment,
     addReply,
     removeComment,
+    editComment,
     vote,
   }
 }
