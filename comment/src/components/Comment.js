@@ -1,4 +1,7 @@
+import { useState } from "react"
+import Reply from "./Reply"
 function Comment({ comment, vote }) {
+  const [showReply, setShowReply] = useState(false)
   const handleUp = () => {
     vote(comment.id, "up")
   }
@@ -21,8 +24,9 @@ function Comment({ comment, vote }) {
         <button onClick={handleDown}>-</button>
       </div>
       <div>
-        <button>replay</button>
+        <button onClick={() => setShowReply((show) => !show)}>reply</button>
       </div>
+      {showReply && <Reply commentId={comment.id} />}
       {/* {comment.replies &&
         comment.replies.map((comment) => {
           return <Comment comment={comment} />

@@ -13,6 +13,7 @@ function AddComment() {
   return (
     <div>
       <form onSubmit={handleSubmitComment}>
+        <img src={user.image.png} />
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
