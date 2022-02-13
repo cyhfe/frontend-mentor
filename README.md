@@ -16,7 +16,7 @@
 
 ### Screenshot
 
-![](./nft.png)
+![](./nft/nft.png)
 
 ### Links
 
