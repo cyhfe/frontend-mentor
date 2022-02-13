@@ -1,26 +1,15 @@
 import { useComments, useUser } from "../context"
 import { useState } from "react"
+import EditReply from "./EditReply"
 
 function AddComment() {
-  const [content, setContent] = useState("")
   const { addComment } = useComments()
   const { user } = useUser()
-  const handleSubmitComment = (e) => {
-    e.preventDefault()
+  const handleSubmit = (content) => {
     addComment(content, user)
-    setContent("")
   }
   return (
-    <div>
-      <form onSubmit={handleSubmitComment}>
-        <img src={user.image.png} />
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <input type="submit" />
-      </form>
-    </div>
+    <EditReply onSubmit={handleSubmit} text="submit" image={user.image.png} />
   )
 }
 

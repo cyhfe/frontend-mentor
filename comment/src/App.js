@@ -1,12 +1,12 @@
 import CommentList from "./components/CommentList"
-import CommentInput from "./components/AddComment"
+import AddComment from "./components/AddComment"
 import { Provider } from "./context/index"
 function App() {
   return (
     <Provider>
       <div className="app">
         <CommentList />
-        <CommentInput />
+        <AddComment />
       </div>
     </Provider>
   )

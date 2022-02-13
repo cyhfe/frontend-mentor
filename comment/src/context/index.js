@@ -33,21 +33,6 @@ function newReply(content, to, user) {
   }
 }
 
-// {
-//   "id": 3,
-//   "content": "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
-//   "createdAt": "1 week ago",
-//   "score": 4,
-//   "replyingTo": "maxblagun",
-//   "user": {
-//     "image": {
-//       "png": "./images/avatars/image-ramsesmiron.png",
-//       "webp": "./images/avatars/image-ramsesmiron.webp"
-//     },
-//     "username": "ramsesmiron"
-//   }
-// },
-
 export const useComments = () => {
   const { comments, setComments } = useContext(CommentContext)
 
@@ -75,13 +60,32 @@ export const useComments = () => {
     setComments([...comments, comment])
   }
 
-  const addReply = (commentId, content, to, user) => {
-    const newReply = newReply()
+  const addReply = (comment, content, user) => {
+    const { id: commentId, user: to } = comment
+    const reply = newReply(content, to, user)
+    const newComments = comments.map((comment) => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          replies: [...comment.replies, reply],
+        }
+      } else {
+        return comment
+      }
+    })
+    setComments(newComments)
+  }
+
+  const removeComment = (id) => {
+    const newComments = comments.filter((comment) => comment.id !== id)
+    setComments(newComments)
   }
 
   return {
     comments,
     addComment,
+    addReply,
+    removeComment,
     vote,
   }
 }
