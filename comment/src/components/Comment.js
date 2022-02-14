@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useComments, useUser } from "../context"
 import EditReply from "./EditReply"
+import CommentCard from "./CommentCard"
 import {
   Modal,
   ModalOpenButton,
@@ -26,40 +27,23 @@ function Comment({ comment, vote }) {
     addReply(comment, content, user)
   }
 
-  const handleSubmitEdit = (e) => {
-    e.preventDefault()
-    editComment(comment.id, content)
-    setEditable(false)
-  }
-
   return (
     <div>
-      <div>
-        <img src={comment?.user?.image?.png} />
-        {user.username === comment.user.username && <div>you</div>}
-        <div>{comment?.user?.username}</div>
-        <div>{comment?.createdAt}</div>
-      </div>
-      <div style={{ border: "1px solid red", padding: "1rem" }}>
-        {editable ? (
-          <div>
-            <form onSubmit={handleSubmitEdit}>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <input type="submit" value="update" />
-            </form>
-          </div>
-        ) : (
-          comment?.content
-        )}
-      </div>
-      <div>
+      <CommentCard
+        type="comment"
+        comment={comment}
+        user={user}
+        editComment={editComment}
+        editable={editable}
+        setEditable={setEditable}
+        handleDown={handleDown}
+        handleUp={handleUp}
+      />
+      {/* <div>
         <button onClick={handleUp}>+</button>
         <div>{comment.score}</div>
         <button onClick={handleDown}>-</button>
-      </div>
+      </div> */}
 
       {comment.replies.length > 0 &&
         comment.replies.map((reply) => <div>{reply.content}</div>)}
@@ -88,8 +72,7 @@ function Control({ comment, setEditable }) {
 
 function Edit({ setEditable }) {
   // const {} = useComments()
-  const { user } = useUser()
-  const onSubmit = (content) => {}
+
   return (
     <div>
       <button onClick={() => setEditable((b) => !b)}>edit</button>
