@@ -14,7 +14,6 @@ function Comment({ comment, vote }) {
   const { user } = useUser()
   const [showReply, setShowReply] = useState(false)
   const [editable, setEditable] = useState(false)
-  const [content, setContent] = useState(comment.content)
 
   const handleUp = () => {
     vote(comment.id, "up")
@@ -30,7 +29,6 @@ function Comment({ comment, vote }) {
   return (
     <div>
       <CommentCard
-        type="comment"
         comment={comment}
         user={user}
         editComment={editComment}
@@ -39,14 +37,7 @@ function Comment({ comment, vote }) {
         handleDown={handleDown}
         handleUp={handleUp}
       />
-      {/* <div>
-        <button onClick={handleUp}>+</button>
-        <div>{comment.score}</div>
-        <button onClick={handleDown}>-</button>
-      </div> */}
 
-      {comment.replies.length > 0 &&
-        comment.replies.map((reply) => <div>{reply.content}</div>)}
       {user.username === comment.user.username ? (
         <Control comment={comment} setEditable={setEditable} />
       ) : (

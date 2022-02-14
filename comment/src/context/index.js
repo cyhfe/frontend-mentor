@@ -37,7 +37,7 @@ export const useComments = () => {
   const { comments, setComments } = useContext(CommentContext)
 
   const vote = (id, action) => {
-    const newComment = comments.map((comment) => {
+    const newComments = comments.map((comment) => {
       if (comment.id !== id) {
         return comment
       } else {
@@ -52,7 +52,34 @@ export const useComments = () => {
         }
       }
     })
-    setComments(newComment)
+    setComments(newComments)
+  }
+
+  const replyVote = (commentId, replyId, action) => {
+    const newComments = comments.map((comment) => {
+      if (comment.id !== commentId) {
+        return comment
+      } else {
+        const newReplies = comment.replies.map((reply) => {
+          if (reply.id !== replyId) return reply
+          const newReply = {
+            ...reply,
+            score:
+              action === "UP"
+                ? reply.score + 1
+                : action === "DOWN"
+                ? reply.score - 1
+                : reply.score,
+          }
+          return newReply
+        })
+        return {
+          ...comment,
+          replies: newReplies,
+        }
+      }
+    })
+    setComments(newComments)
   }
 
   const addComment = (content, user) => {
@@ -102,6 +129,7 @@ export const useComments = () => {
     removeComment,
     editComment,
     vote,
+    replyVote,
   }
 }
 
