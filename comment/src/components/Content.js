@@ -3,7 +3,7 @@ import { useComment } from "../context/comment"
 import { useState } from "react"
 import { useReply } from "../context/reply"
 
-function Content({ type, editable, setEditable }) {
+function Content({ dataSource, editable, setEditable }) {
   const { comment } = useComment()
   const { reply } = useReply()
   const { editComment } = useComments()
@@ -29,11 +29,20 @@ function Content({ type, editable, setEditable }) {
             </form>
           </div>
         ) : (
-          comment?.content
+          dataSource.content
         )}
       </div>
     </div>
   )
 }
 
-export default Content
+function CommentContent() {
+  const { comment } = useComment()
+  return <Content dataSource={comment} />
+}
+function ReplyContent() {
+  const { reply } = useReply()
+  return <Content dataSource={reply} />
+}
+
+export { CommentContent, ReplyContent }

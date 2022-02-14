@@ -2,10 +2,9 @@
 import { css } from "@emotion/react"
 import { useUser } from "../context"
 import { useComment } from "../context/comment"
+import { useReply } from "../context/reply"
 
-function Avatar() {
-  const { comment } = useComment()
-  const { user } = useUser()
+function Avatar({ dataSource, user }) {
   return (
     <div
       css={css`
@@ -15,18 +14,28 @@ function Avatar() {
     >
       <div>
         <img
-          src={comment?.user?.image?.png}
+          src={dataSource?.user?.image?.png}
           css={css`
             width: 30px;
             height: 30px;
           `}
         />
-        {user.username === comment.user.username && <div>you</div>}
-        <div>{comment?.user?.username}</div>
-        <div>{comment?.createdAt}</div>
+        {user.username === dataSource.user.username && <div>you</div>}
+        <div>{dataSource?.user?.username}</div>
+        <div>{dataSource?.createdAt}</div>
       </div>
     </div>
   )
 }
 
-export default Avatar
+function CommentAvatar() {
+  const { comment } = useComment()
+  const { user } = useUser()
+  return <Avatar dataSource={comment} user={user} />
+}
+function ReplyAvatar() {
+  const { reply } = useReply()
+  const { user } = useUser()
+  return <Avatar dataSource={reply} user={user} />
+}
+export { CommentAvatar, ReplyAvatar }

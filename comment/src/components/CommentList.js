@@ -3,11 +3,11 @@ import Comment from "./Comment"
 import AddComment from "./AddComment"
 
 function CommentList() {
-  const { comments, vote } = useComments()
+  const { comments } = useComments()
   return (
     <div>
       {comments.map((comment) => (
-        <Comment comment={comment} vote={vote} key={comment.id} />
+        <Comment comment={comment} key={comment.id} />
       ))}
       <AddComment />
     </div>

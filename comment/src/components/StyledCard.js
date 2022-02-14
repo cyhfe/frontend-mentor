@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import Avatar from "./Avatar"
+import { CommentAvatar, ReplyAvatar } from "./Avatar"
 import { CommentScore, ReplyScore } from "./Score"
-import Content from "./Content"
+import { CommentContent, ReplyContent } from "./Content"
 import { useState } from "react"
 import { useComment } from "../context/comment"
 import Reply from "./Reply"
@@ -11,6 +11,22 @@ import { useReply } from "../context/reply"
 function StyledCard({ dataSource, type }) {
   const [editable, setEditable] = useState(false)
 
+  const renderScore = (type) => {
+    return type === "comment" ? <CommentScore /> : <ReplyScore />
+  }
+
+  const renderContent = (type) => {
+    return type === "comment" ? (
+      <CommentContent editable={editable} setEditable={setEditable} />
+    ) : (
+      <ReplyContent editable={editable} setEditable={setEditable} />
+    )
+  }
+
+  const renderAvatar = () => {
+    return type === "comment" ? <CommentAvatar /> : <ReplyAvatar />
+  }
+
   return (
     <div
       css={css`
@@ -18,7 +34,7 @@ function StyledCard({ dataSource, type }) {
         border: 1px solid red;
       `}
     >
-      {type === "comment" ? <CommentScore /> : <ReplyScore />}
+      {renderScore(type)}
       <div
         css={css`
           display: flex;
@@ -31,14 +47,14 @@ function StyledCard({ dataSource, type }) {
             justify-content: space-between;
           `}
         >
-          <Avatar />
+          {renderAvatar(type)}
           {/* <ControlButton
             type={type}
             editable={editable}
             setEditable={setEditable}
           /> */}
         </div>
-        {/* <Content type={type} editable={editable} setEditable={setEditable} /> */}
+        {renderContent(type)}
         {type === "comment" &&
           dataSource.replies &&
           dataSource.replies.length > 0 &&
@@ -52,13 +68,11 @@ function StyledCard({ dataSource, type }) {
 
 function StyledCommentCard() {
   const { comment } = useComment()
-
   return <StyledCard dataSource={comment} type="comment" />
 }
 
 function StyledReplyCard() {
   const { reply } = useReply()
-
   return <StyledCard dataSource={reply} type="reply" />
 }
 

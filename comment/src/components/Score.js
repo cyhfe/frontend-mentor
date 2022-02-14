@@ -27,7 +27,7 @@ function ReplyScore() {
   const handleVote = (action) => {
     replyVote(comment.id, reply.id, action)
   }
-  return <Score onVote={handleVote} score={comment.score} />
+  return <Score onVote={handleVote} score={reply.score} />
 }
 
 export { CommentScore, ReplyScore }

@@ -6,15 +6,15 @@ import { ReplyProvider } from "../context/reply"
 import { StyledReplyCard } from "./StyledCard"
 
 function Reply({ comment, reply }) {
-  const { removeReply, editReply } = useComments()
+  // const { removeReply, editReply } = useComments()
 
-  const handleRemove = () => {
-    removeReply(comment.id, reply.id)
-  }
+  // const handleRemove = () => {
+  //   removeReply(comment.id, reply.id)
+  // }
 
-  const handleEditReply = (content) => {
-    editReply(comment.id, reply.id, content)
-  }
+  // const handleEditReply = (content) => {
+  //   editReply(comment.id, reply.id, content)
+  // }
 
   return (
     <div
