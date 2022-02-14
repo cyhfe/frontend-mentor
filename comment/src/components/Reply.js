@@ -3,7 +3,7 @@ import { css } from "@emotion/react"
 import { useComments } from "../context"
 import { CommentProvider } from "../context/comment"
 import { ReplyProvider } from "../context/reply"
-import StyledCard from "./StyledCard"
+import { StyledReplyCard } from "./StyledCard"
 
 function Reply({ comment, reply }) {
   const { removeReply, editReply } = useComments()
@@ -24,7 +24,7 @@ function Reply({ comment, reply }) {
     >
       <CommentProvider comment={comment}>
         <ReplyProvider reply={reply}>
-          <StyledCard type="reply" />
+          <StyledReplyCard type="reply" />
         </ReplyProvider>
       </CommentProvider>
     </div>

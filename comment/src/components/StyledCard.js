@@ -7,9 +7,9 @@ import { useState } from "react"
 import { useComment } from "../context/comment"
 import Reply from "./Reply"
 import ControlButton from "./ControlButton"
-function StyledCard({ type }) {
+import { useReply } from "../context/reply"
+function StyledCard({ dataSource, type }) {
   const [editable, setEditable] = useState(false)
-  const { comment } = useComment()
 
   return (
     <div
@@ -32,22 +32,34 @@ function StyledCard({ type }) {
           `}
         >
           <Avatar />
-          <ControlButton
+          {/* <ControlButton
             type={type}
             editable={editable}
             setEditable={setEditable}
-          />
+          /> */}
         </div>
-        <Content type={type} editable={editable} setEditable={setEditable} />
+        {/* <Content type={type} editable={editable} setEditable={setEditable} /> */}
         {type === "comment" &&
-          comment.replies &&
-          comment.replies.length > 0 &&
-          comment.replies.map((reply) => (
-            <Reply comment={comment} reply={reply} key={reply.id} />
+          dataSource.replies &&
+          dataSource.replies.length > 0 &&
+          dataSource.replies.map((reply) => (
+            <Reply comment={dataSource} reply={reply} key={reply.id} />
           ))}
       </div>
     </div>
   )
 }
 
-export default StyledCard
+function StyledCommentCard() {
+  const { comment } = useComment()
+
+  return <StyledCard dataSource={comment} type="comment" />
+}
+
+function StyledReplyCard() {
+  const { reply } = useReply()
+
+  return <StyledCard dataSource={reply} type="reply" />
+}
+
+export { StyledCommentCard, StyledReplyCard }

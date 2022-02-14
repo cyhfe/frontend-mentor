@@ -1,8 +1,8 @@
 import { useComments, useUser } from "../context"
 
 import { CommentProvider } from "../context/comment"
-import Score from "./Score"
-import StyledCard from "./StyledCard"
+
+import { StyledCommentCard } from "./StyledCard"
 function Comment({ comment }) {
   // const { editComment, removeComment } = useComments()
 
@@ -19,7 +19,7 @@ function Comment({ comment }) {
   return (
     <div>
       <CommentProvider comment={comment}>
-        <StyledCard type="comment" />
+        <StyledCommentCard />
       </CommentProvider>
     </div>
   )
