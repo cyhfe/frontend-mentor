@@ -1,40 +1,25 @@
 import { useComments, useUser } from "../context"
-import CommentCard from "./CommentCard"
-import { CommentProvider, useComment } from "../context/comment"
+
+import { CommentProvider } from "../context/comment"
 import Score from "./Score"
-function Comment({ comment, vote }) {
-  const { editComment, removeComment } = useComments()
-  const { user } = useUser()
-  const { voteUp, voteDown } = useComment()
+import StyledCard from "./StyledCard"
+function Comment({ comment }) {
+  // const { editComment, removeComment } = useComments()
 
-  const handleUp = () => {
-    vote(comment.id, "up")
-  }
-  const handleDown = () => {
-    vote(comment.id, "down")
-  }
+  // const { user } = useUser()
 
-  const handleRemove = () => {
-    removeComment(comment.id)
-  }
+  // const handleRemove = () => {
+  //   removeComment(comment.id)
+  // }
 
-  const handleEditComment = (content) => {
-    editComment(comment.id, content)
-  }
+  // const handleEditComment = (content) => {
+  //   editComment(comment.id, content)
+  // }
 
   return (
     <div>
       <CommentProvider comment={comment}>
-        <CommentCard
-          comment={comment}
-          user={user}
-          editComment={handleEditComment}
-          handleDown={handleDown}
-          handleUp={handleUp}
-          onRemove={handleRemove}
-        >
-          <Score type="comment" />
-        </CommentCard>
+        <StyledCard type="comment" />
       </CommentProvider>
     </div>
   )

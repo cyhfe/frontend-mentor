@@ -1,26 +1,33 @@
 import { useComment } from "../context/comment"
 import { useComments } from "../context"
 import { useReply } from "../context/reply"
-function Score({ type }) {
-  const { comment } = useComment()
-  const { reply } = useReply()
-  const { replyVote, vote } = useComments()
-
-  const handleVote = (action) => {
-    if (type === "comment") {
-      vote(comment.id, action)
-    } else if (type === "reply") {
-      replyVote(comment.id, reply.id, action)
-    }
-  }
-
+function Score({ score, onVote }) {
   return (
     <div>
-      <button onClick={() => handleVote("UP")}>+</button>
-      <div>{type === "comment" ? comment.score : reply.score}</div>
-      <button onClick={() => handleVote("DOWN")}>-</button>
+      <button onClick={() => onVote("UP")}>+</button>
+      <div>{score}</div>
+      <button onClick={() => onVote("DOWN")}>-</button>
     </div>
   )
 }
 
-export default Score
+function CommentScore() {
+  const { comment } = useComment()
+  const { vote } = useComments()
+  const handleVote = (action) => {
+    vote(comment.id, action)
+  }
+  return <Score onVote={handleVote} score={comment.score} />
+}
+
+function ReplyScore() {
+  const { comment } = useComment()
+  const { reply } = useReply()
+  const { replyVote } = useComments()
+  const handleVote = (action) => {
+    replyVote(comment.id, reply.id, action)
+  }
+  return <Score onVote={handleVote} score={comment.score} />
+}
+
+export { CommentScore, ReplyScore }

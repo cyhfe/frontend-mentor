@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
 import { useState } from "react"
-import { useComments, useUser } from "../context"
 import Reply from "./Reply"
 
-import { CommentProvider, useComment } from "../context/comment"
 import AddReply from "./AddReply"
 
 import {
@@ -15,16 +13,7 @@ import {
   ModalContents,
 } from "./Modal"
 
-function CommentCard({
-  comment,
-  user,
-  editComment,
-  handleUp,
-  handleDown,
-  onRemove,
-  children,
-}) {
-  const [editable, setEditable] = useState(false)
+function CommentCard({ comment, user, onRemove, children }) {
   return (
     <div
       css={css`
@@ -45,12 +34,7 @@ function CommentCard({
           `}
         >
           <Header comment={comment} user={user} />
-          <Content
-            comment={comment}
-            editComment={editComment}
-            editable={editable}
-            setEditable={setEditable}
-          />
+          <Content editable={editable} setEditable={setEditable} />
         </div>
       </div>
       {comment.replies &&
@@ -160,67 +144,5 @@ function Header({ comment, user }) {
     </div>
   )
 }
-
-function Content({ editable, setEditable, editComment, comment }) {
-  const [content, setContent] = useState(comment.content)
-  const handleSubmitEdit = (e) => {
-    e.preventDefault()
-    editComment(content)
-    setEditable(false)
-  }
-  return (
-    <div>
-      <div>
-        {editable ? (
-          <div>
-            <form onSubmit={handleSubmitEdit}>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <input type="submit" value="update" />
-            </form>
-          </div>
-        ) : (
-          comment?.content
-        )}
-      </div>
-    </div>
-  )
-}
-
-// function Reply({ comment, reply, user }) {
-//   const { replyVote, removeReply, editReply } = useComments()
-//   const handleVote = (commentId, replyId, action) => {
-//     replyVote(commentId, replyId, action)
-//   }
-
-//   const handleRemove = () => {
-//     removeReply(comment.id, reply.id)
-//   }
-
-//   const handleEditReply = (content) => {
-//     editReply(comment.id, reply.id, content)
-//   }
-
-//   return (
-//     <div
-//       css={css`
-//         margin-left: 2rem;
-//       `}
-//     >
-//       <CommentProvider comment={comment}>
-//         <CommentCard
-//           comment={reply}
-//           user={user}
-//           handleDown={() => handleVote(comment.id, reply.id, "DOWN")}
-//           handleUp={() => handleVote(comment.id, reply.id, "UP")}
-//           onRemove={handleRemove}
-//           editComment={handleEditReply}
-//         />
-//       </CommentProvider>
-//     </div>
-//   )
-// }
 
 export default CommentCard

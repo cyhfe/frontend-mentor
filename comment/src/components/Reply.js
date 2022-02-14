@@ -2,14 +2,11 @@
 import { css } from "@emotion/react"
 import { useComments } from "../context"
 import { CommentProvider } from "../context/comment"
-import CommentCard from "./CommentCard"
-import Score from "./Score"
 import { ReplyProvider } from "../context/reply"
-function Reply({ comment, reply, user }) {
-  const { replyVote, removeReply, editReply } = useComments()
-  const handleVote = (commentId, replyId, action) => {
-    replyVote(commentId, replyId, action)
-  }
+import StyledCard from "./StyledCard"
+
+function Reply({ comment, reply }) {
+  const { removeReply, editReply } = useComments()
 
   const handleRemove = () => {
     removeReply(comment.id, reply.id)
@@ -27,16 +24,7 @@ function Reply({ comment, reply, user }) {
     >
       <CommentProvider comment={comment}>
         <ReplyProvider reply={reply}>
-          <CommentCard
-            comment={reply}
-            user={user}
-            handleDown={() => handleVote(comment.id, reply.id, "DOWN")}
-            handleUp={() => handleVote(comment.id, reply.id, "UP")}
-            onRemove={handleRemove}
-            editComment={handleEditReply}
-          >
-            <Score type="reply" replyId={reply.id} />
-          </CommentCard>
+          <StyledCard type="reply" />
         </ReplyProvider>
       </CommentProvider>
     </div>
