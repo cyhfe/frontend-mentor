@@ -1,19 +1,9 @@
-import { useState } from "react"
 import { useComments, useUser } from "../context"
-import EditReply from "./EditReply"
 import CommentCard from "./CommentCard"
-import {
-  Modal,
-  ModalOpenButton,
-  ModalDismissButton,
-  ModalConfirmButton,
-  ModalContents,
-} from "./Modal"
+
 function Comment({ comment, vote }) {
-  const { addReply, editComment } = useComments()
+  const { addReply, editComment, removeComment } = useComments()
   const { user } = useUser()
-  const [showReply, setShowReply] = useState(false)
-  const [editable, setEditable] = useState(false)
 
   const handleUp = () => {
     vote(comment.id, "up")
@@ -26,77 +16,24 @@ function Comment({ comment, vote }) {
     addReply(comment, content, user)
   }
 
+  const handleRemove = () => {
+    removeComment(comment.id)
+  }
+
+  const handleEditComment = (content) => {
+    editComment(comment.id, content)
+  }
+
   return (
     <div>
       <CommentCard
         comment={comment}
         user={user}
-        editComment={editComment}
-        editable={editable}
-        setEditable={setEditable}
+        editComment={handleEditComment}
         handleDown={handleDown}
         handleUp={handleUp}
+        onRemove={handleRemove}
       />
-
-      {user.username === comment.user.username ? (
-        <Control comment={comment} setEditable={setEditable} />
-      ) : (
-        <div>
-          <button onClick={() => setShowReply((show) => !show)}>reply</button>
-        </div>
-      )}
-      {showReply && (
-        <EditReply onSubmit={onSubmit} text="Replys" image={user.image.png} />
-      )}
-    </div>
-  )
-}
-
-function Control({ comment, setEditable }) {
-  return (
-    <>
-      <Delete comment={comment} />
-      <Edit setEditable={setEditable} />
-    </>
-  )
-}
-
-function Edit({ setEditable }) {
-  // const {} = useComments()
-
-  return (
-    <div>
-      <button onClick={() => setEditable((b) => !b)}>edit</button>
-      {/* <EditReply onSubmit={onSubmit} text="Replys" image={user.image.png} /> */}
-    </div>
-  )
-}
-
-function Delete({ comment }) {
-  const { removeComment } = useComments()
-  return (
-    <div>
-      <Modal>
-        <ModalOpenButton>
-          <button>delete</button>
-        </ModalOpenButton>
-        <ModalContents>
-          <div>Are you sure you want to delete this comment?</div>
-          <ModalDismissButton>
-            <button>cancel</button>
-          </ModalDismissButton>
-          <ModalConfirmButton>
-            <button
-              onClick={(setIsOpen) => {
-                removeComment(comment.id)
-                setIsOpen(false)
-              }}
-            >
-              confirm
-            </button>
-          </ModalConfirmButton>
-        </ModalContents>
-      </Modal>
     </div>
   )
 }

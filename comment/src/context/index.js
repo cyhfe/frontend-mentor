@@ -122,6 +122,41 @@ export const useComments = () => {
     setComments(newComments)
   }
 
+  const removeReply = (commentId, replyId) => {
+    const newComments = comments.map((comment) => {
+      if (comment.id === commentId) {
+        const newReplies = comment.replies.filter(
+          (reply) => reply.id !== replyId
+        )
+        return {
+          ...comment,
+          replies: newReplies,
+        }
+      } else {
+        return comment
+      }
+    })
+    setComments(newComments)
+  }
+
+  const editReply = (commentId, replyId, content) => {
+    const newComments = comments.map((comment) => {
+      if (comment.id !== commentId) return comment
+      const newReplies = comment.replies.map((reply) => {
+        if (reply.id !== replyId) return reply
+        return {
+          ...reply,
+          content,
+        }
+      })
+      return {
+        ...comment,
+        replies: newReplies,
+      }
+    })
+    setComments(newComments)
+  }
+
   return {
     comments,
     addComment,
@@ -130,6 +165,8 @@ export const useComments = () => {
     editComment,
     vote,
     replyVote,
+    removeReply,
+    editReply,
   }
 }
 
