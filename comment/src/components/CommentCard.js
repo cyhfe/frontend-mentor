@@ -2,10 +2,11 @@
 import { css } from "@emotion/react"
 import { useState } from "react"
 import { useComments, useUser } from "../context"
-import { useComment } from "../context/comment"
-import { CommentProvider } from "../context/comment"
+import Reply from "./Reply"
 
-import EditReply from "./EditReply"
+import { CommentProvider, useComment } from "../context/comment"
+import AddReply from "./AddReply"
+
 import {
   Modal,
   ModalOpenButton,
@@ -21,6 +22,7 @@ function CommentCard({
   handleUp,
   handleDown,
   onRemove,
+  children,
 }) {
   const [editable, setEditable] = useState(false)
   return (
@@ -35,7 +37,7 @@ function CommentCard({
           display: flex;
         `}
       >
-        <Score handleUp={handleUp} handleDown={handleDown} comment={comment} />
+        {children}
         <div
           css={css`
             display: flex;
@@ -187,61 +189,38 @@ function Content({ editable, setEditable, editComment, comment }) {
   )
 }
 
-function Score({ handleUp, handleDown, comment }) {
-  return (
-    <div>
-      <button onClick={handleUp}>+</button>
-      <div>{comment.score}</div>
-      <button onClick={handleDown}>-</button>
-    </div>
-  )
-}
+// function Reply({ comment, reply, user }) {
+//   const { replyVote, removeReply, editReply } = useComments()
+//   const handleVote = (commentId, replyId, action) => {
+//     replyVote(commentId, replyId, action)
+//   }
 
-function Reply({ comment, reply, user }) {
-  const { replyVote, removeReply, editReply } = useComments()
-  const handleVote = (commentId, replyId, action) => {
-    replyVote(commentId, replyId, action)
-  }
+//   const handleRemove = () => {
+//     removeReply(comment.id, reply.id)
+//   }
 
-  const handleRemove = () => {
-    removeReply(comment.id, reply.id)
-  }
+//   const handleEditReply = (content) => {
+//     editReply(comment.id, reply.id, content)
+//   }
 
-  const handleEditReply = (content) => {
-    editReply(comment.id, reply.id, content)
-  }
-
-  return (
-    <div
-      css={css`
-        margin-left: 2rem;
-      `}
-    >
-      <CommentProvider comment={comment}>
-        <CommentCard
-          comment={reply}
-          user={user}
-          handleDown={() => handleVote(comment.id, reply.id, "DOWN")}
-          handleUp={() => handleVote(comment.id, reply.id, "UP")}
-          onRemove={handleRemove}
-          editComment={handleEditReply}
-        />
-      </CommentProvider>
-    </div>
-  )
-}
-
-function AddReply() {
-  const { id } = useComment()
-  const { addReply } = useComments()
-  const { user } = useUser()
-  const handleSubmit = (content) => {
-    console.log(id)
-    addReply(id, content, user)
-  }
-  return (
-    <EditReply onSubmit={handleSubmit} text="submit" image={user.image.png} />
-  )
-}
+//   return (
+//     <div
+//       css={css`
+//         margin-left: 2rem;
+//       `}
+//     >
+//       <CommentProvider comment={comment}>
+//         <CommentCard
+//           comment={reply}
+//           user={user}
+//           handleDown={() => handleVote(comment.id, reply.id, "DOWN")}
+//           handleUp={() => handleVote(comment.id, reply.id, "UP")}
+//           onRemove={handleRemove}
+//           editComment={handleEditReply}
+//         />
+//       </CommentProvider>
+//     </div>
+//   )
+// }
 
 export default CommentCard

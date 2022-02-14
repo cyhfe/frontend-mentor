@@ -44,9 +44,9 @@ export const useComments = () => {
         return {
           ...comment,
           score:
-            action === "up"
+            action === "UP"
               ? comment.score + 1
-              : action === "down"
+              : action === "DOWN"
               ? comment.score - 1
               : comment.score,
         }
