@@ -1,8 +1,8 @@
 import { useComments, useUser } from "../context"
 import CommentCard from "./CommentCard"
-
+import { CommentProvider } from "../context/comment"
 function Comment({ comment, vote }) {
-  const { addReply, editComment, removeComment } = useComments()
+  const { editComment, removeComment } = useComments()
   const { user } = useUser()
 
   const handleUp = () => {
@@ -10,10 +10,6 @@ function Comment({ comment, vote }) {
   }
   const handleDown = () => {
     vote(comment.id, "down")
-  }
-
-  const onSubmit = (content) => {
-    addReply(comment, content, user)
   }
 
   const handleRemove = () => {
@@ -26,14 +22,16 @@ function Comment({ comment, vote }) {
 
   return (
     <div>
-      <CommentCard
-        comment={comment}
-        user={user}
-        editComment={handleEditComment}
-        handleDown={handleDown}
-        handleUp={handleUp}
-        onRemove={handleRemove}
-      />
+      <CommentProvider comment={comment}>
+        <CommentCard
+          comment={comment}
+          user={user}
+          editComment={handleEditComment}
+          handleDown={handleDown}
+          handleUp={handleUp}
+          onRemove={handleRemove}
+        />
+      </CommentProvider>
     </div>
   )
 }

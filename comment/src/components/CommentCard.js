@@ -2,6 +2,8 @@
 import { css } from "@emotion/react"
 import { useState } from "react"
 import { useComments, useUser } from "../context"
+import { useComment } from "../context/comment"
+import { CommentProvider } from "../context/comment"
 
 import EditReply from "./EditReply"
 import {
@@ -79,7 +81,7 @@ function Control({ user, comment, onRemove, editable, setEditable }) {
           setEditable={setEditable}
         />
       ) : (
-        <ReplyButton />
+        <ReplyButton comment={comment} />
       )}
     </div>
   )
@@ -126,12 +128,12 @@ function EditButton({ comment, onRemove, editable, setEditable }) {
   )
 }
 
-function ReplyButton() {
+function ReplyButton({ comment }) {
   const [showReply, setShowReply] = useState(false)
   return (
     <div>
       <button onClick={() => setShowReply((b) => !b)}>reply</button>
-      {showReply && <AddReply />}
+      {showReply && <AddReply comment={comment} />}
     </div>
   )
 }
@@ -215,23 +217,27 @@ function Reply({ comment, reply, user }) {
         margin-left: 2rem;
       `}
     >
-      <CommentCard
-        comment={reply}
-        user={user}
-        handleDown={() => handleVote(comment.id, reply.id, "DOWN")}
-        handleUp={() => handleVote(comment.id, reply.id, "UP")}
-        onRemove={handleRemove}
-        editComment={handleEditReply}
-      />
+      <CommentProvider comment={comment}>
+        <CommentCard
+          comment={reply}
+          user={user}
+          handleDown={() => handleVote(comment.id, reply.id, "DOWN")}
+          handleUp={() => handleVote(comment.id, reply.id, "UP")}
+          onRemove={handleRemove}
+          editComment={handleEditReply}
+        />
+      </CommentProvider>
     </div>
   )
 }
 
 function AddReply() {
-  const { addComment } = useComments()
+  const { id } = useComment()
+  const { addReply } = useComments()
   const { user } = useUser()
   const handleSubmit = (content) => {
-    addComment(content, user)
+    console.log(id)
+    addReply(id, content, user)
   }
   return (
     <EditReply onSubmit={handleSubmit} text="submit" image={user.image.png} />
