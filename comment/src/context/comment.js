@@ -1,10 +1,11 @@
 import { createContext, useContext } from "react"
 import { useComments } from "./index"
-
+import { useState } from "react"
 const CommentContext = createContext()
 
 export const useComment = () => {
-  const comment = useContext(CommentContext)
+  const { comment, editable, setEditable, showReply, setShowReply } =
+    useContext(CommentContext)
   const { vote, removeComment, editComment } = useComments()
   const voteUp = () => {
     vote(comment.id, "up")
@@ -24,6 +25,11 @@ export const useComment = () => {
 
   return {
     comment,
+    editable,
+    setEditable,
+    showReply,
+    setShowReply,
+
     voteUp,
     voteDown,
     handleEditComment,
@@ -32,9 +38,16 @@ export const useComment = () => {
 }
 
 export function CommentProvider({ comment, children }) {
+  const [editable, setEditable] = useState(false)
+  const [showReply, setShowReply] = useState(false)
+  const value = {
+    comment,
+    editable,
+    setEditable,
+    showReply,
+    setShowReply,
+  }
   return (
-    <CommentContext.Provider value={comment}>
-      {children}
-    </CommentContext.Provider>
+    <CommentContext.Provider value={value}>{children}</CommentContext.Provider>
   )
 }

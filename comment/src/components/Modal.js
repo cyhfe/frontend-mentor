@@ -46,6 +46,7 @@ export function ModalContentsBase(props) {
   const [isopen, setisOpen] = useContext(ModalContext)
   return (
     <Dialog
+      aria-label="dialog"
       isOpen={isopen}
       onDismiss={() => setisOpen(false)}
       {...props}

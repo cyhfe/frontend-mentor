@@ -3,15 +3,11 @@ import { useComment } from "../context/comment"
 import { useState } from "react"
 import { useReply } from "../context/reply"
 
-function Content({ dataSource, editable, setEditable }) {
-  const { comment } = useComment()
-  const { reply } = useReply()
-  const { editComment } = useComments()
-
-  const [content, setContent] = useState(comment.content)
+function Content({ dataSource, editable, setEditable, onEdit }) {
+  const [content, setContent] = useState(dataSource.content)
   const handleSubmitEdit = (e) => {
     e.preventDefault()
-    editComment(comment.id, content)
+    onEdit(content)
     setEditable(false)
   }
 
@@ -37,12 +33,35 @@ function Content({ dataSource, editable, setEditable }) {
 }
 
 function CommentContent() {
-  const { comment } = useComment()
-  return <Content dataSource={comment} />
+  const { editComment } = useComments()
+  const { comment, editable, setEditable } = useComment()
+  const handleEditComment = (content) => {
+    editComment(comment.id, content)
+  }
+  return (
+    <Content
+      dataSource={comment}
+      editable={editable}
+      setEditable={setEditable}
+      onEdit={handleEditComment}
+    />
+  )
 }
 function ReplyContent() {
-  const { reply } = useReply()
-  return <Content dataSource={reply} />
+  const { editReply } = useComments()
+  const { reply, editable, setEditable } = useReply()
+  const { comment } = useComment()
+  const handleEditReply = (content) => {
+    editReply(comment.id, reply.id, content)
+  }
+  return (
+    <Content
+      dataSource={reply}
+      editable={editable}
+      setEditable={setEditable}
+      onEdit={handleEditReply}
+    />
+  )
 }
 
 export { CommentContent, ReplyContent }

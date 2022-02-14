@@ -1,7 +1,7 @@
-import { useComments, useUser } from "../context"
+import { useComments } from "../context"
 import { useComment } from "../context/comment"
-import { useState } from "react"
-import AddReply from "./AddReply"
+import { useReply } from "../context/reply"
+
 import {
   Modal,
   ModalOpenButton,
@@ -9,28 +9,21 @@ import {
   ModalConfirmButton,
   ModalContents,
 } from "./Modal"
-import { useReply } from "../context/reply"
 
-function ControlButton({ type, editable, setEditable }) {
-  const { user } = useUser()
-  const { comment } = useComment()
-  const isSelf = () => {
-    return user.username === comment.user.username
+function ControlButton({ isSelf, type }) {
+  const renderReplyButton = (type) => {
+    return type === "comment" ? <CommentReplyButton /> : <ReplyReplyButton />
+  }
+  const renderEditButton = (type) => {
+    return type === "comment" ? <CommentEditButton /> : <ReplyEditButton />
+  }
+  const renderButton = () => {
+    return isSelf ? renderEditButton(type) : renderReplyButton(type)
   }
 
-  return (
-    <div>
-      {isSelf() ? (
-        <EditButton type={type} editable={editable} setEditable={setEditable} />
-      ) : (
-        "reply"
-      )}
-    </div>
-  )
+  return <div>{renderButton()}</div>
 }
-// (
-//   <ReplyButton comment={comment} />
-// )
+
 function Delete({ onRemove }) {
   return (
     <div>
@@ -58,21 +51,11 @@ function Delete({ onRemove }) {
     </div>
   )
 }
-function EditButton({ type, editable, setEditable }) {
-  const { removeComment, removeReply } = useComments()
-  const { comment } = useComment()
-  const { reply } = useReply()
-  const handleRemove = () => {
-    if (type === "comment") {
-      removeComment(comment.id)
-    } else if (type === "reply") {
-      removeReply(comment.id, reply.id)
-    }
-  }
 
+function EditButton({ onRemove, setEditable }) {
   return (
     <div>
-      <Delete onRemove={handleRemove} />
+      <Delete onRemove={onRemove} />
       <button
         onClick={() => {
           setEditable((b) => !b)
@@ -84,13 +67,41 @@ function EditButton({ type, editable, setEditable }) {
   )
 }
 
-function ReplyButton({ comment }) {
-  const [showReply, setShowReply] = useState(false)
+function CommentEditButton() {
+  const { removeComment, removeReply } = useComments()
+  const { comment, setEditable } = useComment()
+  const handleRemove = () => {
+    removeComment(comment.id)
+  }
+  return <EditButton onRemove={handleRemove} setEditable={setEditable} />
+}
+
+function ReplyEditButton() {
+  const { removeReply } = useComments()
+  const { comment } = useComment()
+  const { reply, setEditable } = useReply()
+  const handleRemove = () => {
+    removeReply(comment.id, reply.id)
+  }
+  return <EditButton onRemove={handleRemove} setEditable={setEditable} />
+}
+
+function ReplyButton({ setShowReply }) {
   return (
     <div>
       <button onClick={() => setShowReply((b) => !b)}>reply</button>
-      {showReply && <AddReply comment={comment} />}
     </div>
   )
 }
+
+function CommentReplyButton() {
+  const { setShowReply } = useComment()
+  return <ReplyButton setShowReply={setShowReply} />
+}
+
+function ReplyReplyButton() {
+  const { setShowReply } = useReply()
+  return <ReplyButton setShowReply={setShowReply} />
+}
+
 export default ControlButton

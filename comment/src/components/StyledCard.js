@@ -6,25 +6,35 @@ import { CommentContent, ReplyContent } from "./Content"
 import { useState } from "react"
 import { useComment } from "../context/comment"
 import Reply from "./Reply"
-import ControlButton from "./ControlButton"
+import AddReply from "./AddReply"
+import ControlButton, {
+  CommentControlButton,
+  ReplyControlButton,
+} from "./ControlButton"
 import { useReply } from "../context/reply"
-function StyledCard({ dataSource, type }) {
-  const [editable, setEditable] = useState(false)
-
+import { useUser } from "../context"
+function StyledCard({ dataSource, type, showReply, isSelf }) {
   const renderScore = (type) => {
     return type === "comment" ? <CommentScore /> : <ReplyScore />
   }
 
   const renderContent = (type) => {
-    return type === "comment" ? (
-      <CommentContent editable={editable} setEditable={setEditable} />
-    ) : (
-      <ReplyContent editable={editable} setEditable={setEditable} />
-    )
+    return type === "comment" ? <CommentContent /> : <ReplyContent />
   }
 
-  const renderAvatar = () => {
+  const renderAvatar = (type) => {
     return type === "comment" ? <CommentAvatar /> : <ReplyAvatar />
+  }
+
+  const rederReply = (type) => {
+    return (
+      type === "comment" &&
+      dataSource.replies &&
+      dataSource.replies.length > 0 &&
+      dataSource.replies.map((reply) => (
+        <Reply comment={dataSource} reply={reply} key={reply.id} />
+      ))
+    )
   }
 
   return (
@@ -48,32 +58,46 @@ function StyledCard({ dataSource, type }) {
           `}
         >
           {renderAvatar(type)}
-          {/* <ControlButton
-            type={type}
-            editable={editable}
-            setEditable={setEditable}
-          /> */}
+          <ControlButton type={type} isSelf={isSelf} />
         </div>
         {renderContent(type)}
-        {type === "comment" &&
-          dataSource.replies &&
-          dataSource.replies.length > 0 &&
-          dataSource.replies.map((reply) => (
-            <Reply comment={dataSource} reply={reply} key={reply.id} />
-          ))}
+        {rederReply(type)}
+        {showReply && <AddReply />}
       </div>
     </div>
   )
 }
 
 function StyledCommentCard() {
-  const { comment } = useComment()
-  return <StyledCard dataSource={comment} type="comment" />
+  const { comment, showReply } = useComment()
+  const { user } = useUser()
+  const isSelf = () => {
+    return comment.user.username === user.username
+  }
+  return (
+    <StyledCard
+      dataSource={comment}
+      type="comment"
+      isSelf={isSelf()}
+      showReply={showReply}
+    />
+  )
 }
 
 function StyledReplyCard() {
-  const { reply } = useReply()
-  return <StyledCard dataSource={reply} type="reply" />
+  const { reply, showReply } = useReply()
+  const { user } = useUser()
+  const isSelf = () => {
+    return reply.user.username === user.username
+  }
+  return (
+    <StyledCard
+      dataSource={reply}
+      type="reply"
+      isSelf={isSelf()}
+      showReply={showReply}
+    />
+  )
 }
 
 export { StyledCommentCard, StyledReplyCard }
