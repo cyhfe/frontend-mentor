@@ -11,6 +11,15 @@ function Content({ dataSource, editable, setEditable, onEdit }) {
     setEditable(false)
   }
 
+  const renderContent = () => {
+    return (
+      <div>
+        @<span>{dataSource && dataSource.replyingTo}</span>
+        {dataSource.content}
+      </div>
+    )
+  }
+
   return (
     <div>
       <div>
@@ -25,7 +34,7 @@ function Content({ dataSource, editable, setEditable, onEdit }) {
             </form>
           </div>
         ) : (
-          dataSource.content
+          renderContent()
         )}
       </div>
     </div>

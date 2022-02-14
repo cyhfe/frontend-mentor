@@ -87,10 +87,10 @@ export const useComments = () => {
     setComments([...comments, comment])
   }
 
-  const addReply = (commentId, content, user) => {
+  const addReply = (commentId, content, user, to) => {
     const newComments = comments.map((comment) => {
       if (comment.id !== commentId) return comment
-      const to = "comment.user.username"
+      to = to ?? comment.user.username
       const reply = newReply(content, to, user)
       return {
         ...comment,

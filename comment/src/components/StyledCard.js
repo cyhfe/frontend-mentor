@@ -3,14 +3,11 @@ import { css } from "@emotion/react"
 import { CommentAvatar, ReplyAvatar } from "./Avatar"
 import { CommentScore, ReplyScore } from "./Score"
 import { CommentContent, ReplyContent } from "./Content"
-import { useState } from "react"
+import { CommentAddReply, ReplyAddReply } from "./AddReply"
 import { useComment } from "../context/comment"
 import Reply from "./Reply"
 import AddReply from "./AddReply"
-import ControlButton, {
-  CommentControlButton,
-  ReplyControlButton,
-} from "./ControlButton"
+import ControlButton from "./ControlButton"
 import { useReply } from "../context/reply"
 import { useUser } from "../context"
 function StyledCard({ dataSource, type, showReply, isSelf }) {
@@ -35,6 +32,10 @@ function StyledCard({ dataSource, type, showReply, isSelf }) {
         <Reply comment={dataSource} reply={reply} key={reply.id} />
       ))
     )
+  }
+
+  const renderAddReply = (type) => {
+    return type === "comment" ? <CommentAddReply /> : <ReplyAddReply />
   }
 
   return (
@@ -62,7 +63,7 @@ function StyledCard({ dataSource, type, showReply, isSelf }) {
         </div>
         {renderContent(type)}
         {rederReply(type)}
-        {showReply && <AddReply />}
+        {showReply && renderAddReply(type)}
       </div>
     </div>
   )
