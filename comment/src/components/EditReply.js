@@ -51,7 +51,7 @@ function EditReply({ onSubmit, image, text, initContent = "" }) {
               height: 32px;
             `}
           >
-            <img src={image} alt="img" />
+            {image && <img src={image} alt="img" />}
           </div>
           <div>
             <Button type="Submit">{text}</Button>
