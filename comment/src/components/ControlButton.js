@@ -1,7 +1,10 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react"
 import { useComments } from "../context"
 import { useComment } from "../context/comment"
 import { useReply } from "../context/reply"
 
+import Button from "./Button"
 import {
   Modal,
   ModalOpenButton,
@@ -9,6 +12,8 @@ import {
   ModalConfirmButton,
   ModalContents,
 } from "./Modal"
+
+import { IconDelete, IconEdit, IconReply } from "./Icons"
 
 function ControlButton({ isSelf, type }) {
   const renderReplyButton = (type) => {
@@ -29,23 +34,34 @@ function Delete({ onRemove }) {
     <div>
       <Modal>
         <ModalOpenButton>
-          <button>delete</button>
+          <Button variant="danger" space>
+            <IconDelete />
+            Delete
+          </Button>
         </ModalOpenButton>
-        <ModalContents>
-          <div>Are you sure you want to delete this comment?</div>
-          <ModalDismissButton>
-            <button>cancel</button>
-          </ModalDismissButton>
-          <ModalConfirmButton>
-            <button
-              onClick={(setIsOpen) => {
-                onRemove()
-                setIsOpen(false)
-              }}
-            >
-              confirm
-            </button>
-          </ModalConfirmButton>
+        <ModalContents title="Delete Comment">
+          <p>Are you sure you want to delete this comment?</p>
+          <div
+            css={css`
+              display: flex;
+              justify-content: right;
+              column-gap: 1rem;
+            `}
+          >
+            <ModalDismissButton>
+              <Button color="danger">cancel</Button>
+            </ModalDismissButton>
+            <ModalConfirmButton>
+              <Button
+                onClick={(setIsOpen) => {
+                  onRemove()
+                  setIsOpen(false)
+                }}
+              >
+                confirm
+              </Button>
+            </ModalConfirmButton>
+          </div>
         </ModalContents>
       </Modal>
     </div>
@@ -54,21 +70,27 @@ function Delete({ onRemove }) {
 
 function EditButton({ onRemove, setEditable }) {
   return (
-    <div>
+    <div
+      css={css`
+        display: flex;
+      `}
+    >
       <Delete onRemove={onRemove} />
-      <button
+      <Button
+        variant="primary"
         onClick={() => {
           setEditable((b) => !b)
         }}
       >
-        edit
-      </button>
+        <IconEdit />
+        Edit
+      </Button>
     </div>
   )
 }
 
 function CommentEditButton() {
-  const { removeComment, removeReply } = useComments()
+  const { removeComment } = useComments()
   const { comment, setEditable } = useComment()
   const handleRemove = () => {
     removeComment(comment.id)
@@ -89,7 +111,10 @@ function ReplyEditButton() {
 function ReplyButton({ setShowReply }) {
   return (
     <div>
-      <button onClick={() => setShowReply((b) => !b)}>reply</button>
+      <Button variant="primary" onClick={() => setShowReply((b) => !b)} space>
+        <IconReply />
+        Reply
+      </Button>
     </div>
   )
 }

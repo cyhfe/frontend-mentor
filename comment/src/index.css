@@ -1,3 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+
 body {
   margin: 0;
+  font-family: "Rubik", sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+  background-color: hsl(228, 33%, 97%);
+  display: flex;
+  margin: auto;
+  max-width: 900px;
+}
+
+img {
+  max-width: 100%;
 }

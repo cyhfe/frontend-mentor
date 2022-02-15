@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Dialog, DialogContent } from "@reach/dialog"
+import { Dialog } from "@reach/dialog"
 import "@reach/dialog/styles.css"
 import { cloneElement, createContext, useContext, useState } from "react"
 import { css } from "@emotion/react"
@@ -22,7 +22,7 @@ export function Modal({ children }) {
 }
 
 export function ModalOpenButton({ children: child }) {
-  const [isopen, setisOpen] = useContext(ModalContext)
+  const [, setisOpen] = useContext(ModalContext)
   return cloneElement(child, {
     onClick: callAll(() => setisOpen(true), child.props.onClick),
   })
@@ -46,6 +46,10 @@ export function ModalContentsBase(props) {
   const [isopen, setisOpen] = useContext(ModalContext)
   return (
     <Dialog
+      css={css`
+        border-radius: 12px;
+        max-width: 450px;
+      `}
       aria-label="dialog"
       isOpen={isopen}
       onDismiss={() => setisOpen(false)}

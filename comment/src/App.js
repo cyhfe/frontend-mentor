@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import CommentList from "./components/CommentList"
 import { Provider } from "./context/index"
 function App() {

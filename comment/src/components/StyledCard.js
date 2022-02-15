@@ -6,10 +6,10 @@ import { CommentContent, ReplyContent } from "./Content"
 import { CommentAddReply, ReplyAddReply } from "./AddReply"
 import { useComment } from "../context/comment"
 import Reply from "./Reply"
-import AddReply from "./AddReply"
 import ControlButton from "./ControlButton"
 import { useReply } from "../context/reply"
 import { useUser } from "../context"
+import { colors } from "../utils/style"
 function StyledCard({ dataSource, type, showReply, isSelf }) {
   const renderScore = (type) => {
     return type === "comment" ? <CommentScore /> : <ReplyScore />
@@ -39,31 +39,53 @@ function StyledCard({ dataSource, type, showReply, isSelf }) {
   }
 
   return (
-    <div
-      css={css`
-        display: flex;
-        border: 1px solid red;
-      `}
-    >
-      {renderScore(type)}
+    <div>
       <div
         css={css`
-          display: flex;
-          flex-direction: column;
+          padding: 1rem;
+          background-color: ${colors.White};
+          margin-bottom: 1rem;
+          border-radius: 12px;
         `}
       >
+        <div>
+          {renderAvatar(type)}
+          <div
+            css={css`
+              margin-bottom: 1rem;
+            `}
+          >
+            {renderContent(type)}
+          </div>
+        </div>
         <div
           css={css`
             display: flex;
             justify-content: space-between;
+            align-items: center;
           `}
         >
-          {renderAvatar(type)}
+          {renderScore(type)}
           <ControlButton type={type} isSelf={isSelf} />
         </div>
-        {renderContent(type)}
+      </div>
+      {showReply && renderAddReply(type)}
+      <div
+        css={css`
+          margin-left: 3rem;
+          position: relative;
+          &::before {
+            position: absolute;
+            content: "";
+            display: block;
+            left: -1.5rem;
+            width: 2px;
+            height: 100%;
+            background-color: ${colors.Lightgray};
+          }
+        `}
+      >
         {rederReply(type)}
-        {showReply && renderAddReply(type)}
       </div>
     </div>
   )

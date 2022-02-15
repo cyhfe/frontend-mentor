@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react"
 import { useComments, useUser } from "../context"
 import EditReply from "./EditReply"
 
@@ -8,7 +10,15 @@ function AddComment() {
     addComment(content, user)
   }
   return (
-    <EditReply onSubmit={handleSubmit} text="submit" image={user.image.png} />
+    <div
+      css={css`
+        padding: 1rem;
+        background-color: #fff;
+        border-radius: 12px;
+      `}
+    >
+      <EditReply onSubmit={handleSubmit} text="Send" image={user.image.png} />
+    </div>
   )
 }
 

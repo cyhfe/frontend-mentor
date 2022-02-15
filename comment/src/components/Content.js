@@ -1,20 +1,37 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react"
 import { useComments } from "../context"
 import { useComment } from "../context/comment"
-import { useState } from "react"
 import { useReply } from "../context/reply"
+import EditReply from "./EditReply"
+import { colors } from "../utils/style"
 
 function Content({ dataSource, editable, setEditable, onEdit }) {
-  const [content, setContent] = useState(dataSource.content)
-  const handleSubmitEdit = (e) => {
-    e.preventDefault()
+  const handleSubmitEdit = (content) => {
     onEdit(content)
     setEditable(false)
   }
 
   const renderContent = () => {
     return (
-      <div>
-        @<span>{dataSource && dataSource.replyingTo}</span>
+      <div
+        css={css`
+          color: ${colors.GrayishBlue};
+          font-size: 16px;
+          line-height: 1.6;
+        `}
+      >
+        {dataSource.replyingTo && (
+          <span
+            css={css`
+              margin-right: 6px;
+              font-weight: 500;
+              color: ${colors.Moderateblue};
+            `}
+          >
+            @{dataSource.replyingTo}
+          </span>
+        )}
         {dataSource.content}
       </div>
     )
@@ -24,15 +41,11 @@ function Content({ dataSource, editable, setEditable, onEdit }) {
     <div>
       <div>
         {editable ? (
-          <div>
-            <form onSubmit={handleSubmitEdit}>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <input type="submit" value="update" />
-            </form>
-          </div>
+          <EditReply
+            text="Submit"
+            onSubmit={handleSubmitEdit}
+            initContent={dataSource.content}
+          />
         ) : (
           renderContent()
         )}

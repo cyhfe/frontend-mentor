@@ -1,0 +1,5 @@
+export { ReactComponent as IconPlus } from "../assets/icons/icon-plus.svg"
+export { ReactComponent as IconMinus } from "../assets/icons/icon-minus.svg"
+export { ReactComponent as IconReply } from "../assets/icons/icon-reply.svg"
+export { ReactComponent as IconDelete } from "../assets/icons/icon-delete.svg"
+export { ReactComponent as IconEdit } from "../assets/icons/icon-edit.svg"
